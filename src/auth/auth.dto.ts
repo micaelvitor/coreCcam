@@ -10,11 +10,14 @@ export class CreateUserDto {
     password: string;
 
     @IsString()
+    @IsNotEmpty()
     fullname: string;
 
     @IsString()
+    @IsNotEmpty()
     birthday: string;
 
+    @IsNotEmpty()
     purposeId: number;
 
     admin: number;
