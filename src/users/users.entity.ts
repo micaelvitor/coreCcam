@@ -12,16 +12,16 @@ export class Users {
     @Column()
     password: string;
 
-    @Column()
+    @Column({ default: '' })
     fullname: string;
 
-    @Column()
+    @Column({ default: '' })
     birthday: string;
 
-    @Column({ name: 'purpose_id' })
+    @Column({ name: 'purpose_id', default: 1 })
     purposeId: number;
 
-    @Column()
+    @Column({default: 0})
     admin: number;
 
     @BeforeInsert()
