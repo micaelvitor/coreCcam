@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,14 +28,12 @@ export class AuthService {
         };
     }
 
-    async signUp(username: string, pass: string) {
-        const user = await this.usersService.create({
-            username,
-            password: pass,
-        });
+    async signUp(signupdata: CreateUserDto) {
+        const user = await this.usersService.create(signupdata);
         if (!user) {
             throw new InternalServerErrorException();
         }
+        delete user.admin;
         delete user.password;
         return user;
     }

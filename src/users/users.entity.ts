@@ -12,6 +12,18 @@ export class Users {
     @Column()
     password: string;
 
+    @Column({ default: '' })
+    fullname: string;
+
+    @Column({ default: '' })
+    birthday: string;
+
+    @Column({ name: 'purpose_id', default: 1 })
+    purposeId: number;
+
+    @Column({default: 0})
+    admin: number;
+
     @BeforeInsert()
     async hashPassword() {
         this.password = await bcrypt.hash(this.password, 10);

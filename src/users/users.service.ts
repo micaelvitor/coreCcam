@@ -3,6 +3,7 @@ import { Users } from './users.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,7 +20,10 @@ export class UsersService {
     }
 
     async findOneByUsername(username: string): Promise<Users | undefined> {
-        return this.userRepository.findOne({ where: { username } });
+        const user = await this.userRepository.findOne({ where: { username } });
+        delete user.id;
+        delete user.password;
+        return user;
     }
 
     async validateCredentials({
@@ -47,14 +51,8 @@ export class UsersService {
         return user;
     }
 
-    async create({
-        username,
-        password,
-    }: {
-        username: string;
-        password: string;
-    }): Promise<Users> {
-        const userInDb = await this.findOneByUsername(username);
+    async create(signupdata: CreateUserDto): Promise<Users> {
+        const userInDb = await this.findOneByUsername(signupdata.username);
         if (userInDb) {
             throw new HttpException(
                 'User already exists',
@@ -62,10 +60,7 @@ export class UsersService {
             );
         }
 
-        const user: Users = this.userRepository.create({
-            username,
-            password,
-        });
+        const user: Users = this.userRepository.create(signupdata);
 
         await this.userRepository.save(user);
 
