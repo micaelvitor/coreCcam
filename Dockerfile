@@ -17,4 +17,4 @@ COPY . .
 RUN npm run build
 
 # Start the server using the developer build
-CMD [ "npm", "run start:dev" ]
+CMD [ "npm", "run start:prod" ]
