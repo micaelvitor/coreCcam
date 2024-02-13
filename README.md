@@ -27,7 +27,7 @@ src
 })
 ```
 
-# Padrão de chaves do Redis:
+# TODO: Padrão de chaves do Redis:
 
 # Exemplos
 
