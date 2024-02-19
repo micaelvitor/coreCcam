@@ -4,13 +4,19 @@ import {
     HttpCode,
     HttpStatus,
     Post,
+    Get
 } from '@nestjs/common';
 import { CreateUserDto } from './auth.dto'
 import { AuthService } from './auth.service';
+import { PurposeService } from 'src/purpose/purpose.service';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private PurposeService: PurposeService
+
+    ) {}
 
     @HttpCode(HttpStatus.OK)
     @Post('signUp')
@@ -22,5 +28,11 @@ export class AuthController {
     @Post('signIn')
     signIn(@Body() signInDto: Record<string, any>) {
         return this.authService.signIn(signInDto.username, signInDto.password);
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @Get('purposes')
+    async purposes(@Body() signInDto: Record<string, any>) {
+        return await this.PurposeService.findAllPurposes();
     }
 }

@@ -20,5 +20,9 @@ export class CreateUserDto {
     @IsNotEmpty()
     purposeId: number;
 
+    @IsNotEmpty()
+    @IsString()
+    email: string;
+
     admin: number;
 }

@@ -10,7 +10,10 @@ export class UsersController {
     @UseGuards(AuthGuard)
     @Get('profile')
     async getProfile(@Request() req) {
-        return await this.usersService.findOneByUsername(req.user.username)
+        const user = await this.usersService.findOneByUsername(req.user.username);
+        delete user.id;
+        delete user.password;
+        return user;
     }
 
 }
