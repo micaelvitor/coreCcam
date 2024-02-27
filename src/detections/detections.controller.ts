@@ -1,15 +1,15 @@
-import { Controller, UseGuards, Request, Get } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
-// import { DetectionsService } from './detections.service';
+import { Controller, Get, Param } from '@nestjs/common';
+// import { AuthGuard } from '../auth/auth.guard';
+import { DetectionsService } from './detections.service';
 
 @Controller('detections')
 export class UsersController {
-    // constructor(private detectionsService: DetectionsService) {}
+    constructor(private detectionsService: DetectionsService) {}
 
-    @UseGuards(AuthGuard)
-    @Get('detections')
-    async getProfile(@Request() req) {
-        return;
+    // @UseGuards(AuthGuard)
+    @Get('register_detection/:id')
+    async getProfile(@Param() id) {
+        return this.detectionsService.create(id);
     }
 
 }
