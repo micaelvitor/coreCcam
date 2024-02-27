@@ -32,7 +32,7 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Get('purposes')
-    async purposes(@Body() signInDto: Record<string, any>) {
+    async purposes() {
         return await this.PurposeService.findAllPurposes();
     }
 }

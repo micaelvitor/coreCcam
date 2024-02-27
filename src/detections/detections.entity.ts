@@ -1,5 +1,4 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
 
 @Entity({ name: 'detections' })
 export class Detections {
@@ -8,5 +7,8 @@ export class Detections {
 
     @Column()
     person_id: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    created_at: Date;
 
 }
