@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Faces } from './faces.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FacesInterface } from './faces.interface';
 import { CreateFaceDto } from './faces.dto';
 
 @Injectable()
@@ -20,7 +19,7 @@ export class FacesService {
         return person;
     }
 
-    async create(facedata: CreateFaceDto): Promise<Faces> {
+    async create(facedata: CreateFaceDto, username:string): Promise<Faces> {
         const face: Faces = this.facesRepository.create(facedata);
         await this.facesRepository.save(face);
         return face;

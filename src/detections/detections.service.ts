@@ -11,9 +11,9 @@ export class DetectionsService {
         private readonly detectionsRepository: Repository<Detections>,
     ) {}
 
-    async create(personId: CreateDetectionDto): Promise<Detections> {
+    async create(person_id: CreateDetectionDto): Promise<Detections> {
 
-        const verifyPersonId = await this.detectionsRepository.findOneBy(personId);
+        const verifyPersonId = await this.detectionsRepository.findOne({where: person_id});
 
         if (!verifyPersonId) {
             throw new HttpException(
@@ -22,10 +22,24 @@ export class DetectionsService {
             );
         }
     
-        const detection: Detections = this.detectionsRepository.create(personId);
+        const detection: Detections = this.detectionsRepository.create(person_id);
         await this.detectionsRepository.save(detection);
     
         return detection;
+    }
+
+    async getDetections(person_id: CreateDetectionDto): Promise<Detections>{
+
+        const detections = await this.detectionsRepository.findOne({where: person_id});
+
+        if (!detections) {
+            throw new HttpException(
+                'Invalid person id',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
+
+        return detections;
     }
     
 }

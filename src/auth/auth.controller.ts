@@ -15,7 +15,6 @@ export class AuthController {
     constructor(
         private authService: AuthService,
         private PurposeService: PurposeService
-
     ) {}
 
     @HttpCode(HttpStatus.OK)

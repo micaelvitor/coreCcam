@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { PurposeModule } from './purpose/purpose.module';
+import { DetectionsModule } from './detections/detections.module';
+import { FacesModule } from './faces/faces.module';
 
 @Module({
     imports: [
@@ -14,6 +16,8 @@ import { PurposeModule } from './purpose/purpose.module';
             http: process.env.NODE_ENV !== 'production',
         }),
         ConfigModule.forRoot({isGlobal: true}),
+        FacesModule,
+        DetectionsModule,
         PurposeModule,
         AuthModule,
         UsersModule,

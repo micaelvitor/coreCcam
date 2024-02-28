@@ -72,7 +72,6 @@ export class UsersService {
     
         const user: Users = this.userRepository.create(signupdata);
         await this.userRepository.save(user);
-    
         return user;
     }
     
