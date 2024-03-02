@@ -9,4 +9,4 @@ import { Purposes } from './purpose.entity'
     exports: [PurposeService],
 
 })
-export class PurposeModule { }
+export class PurposeModule {}
