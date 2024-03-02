@@ -28,7 +28,7 @@ export class DetectionsService {
         return detection;
     }
 
-    async getDetections(person_id: CreateDetectionDto): Promise<Detections>{
+    async getDetectionsByPersonId(person_id: CreateDetectionDto): Promise<Detections>{
 
         const detections = await this.detectionsRepository.findOne({where: person_id});
 
@@ -40,6 +40,30 @@ export class DetectionsService {
         }
 
         return detections;
+    }
+
+    async getDetections(user_id: string): Promise<Detections[]>{
+        try{
+            const detections= await this.detectionsRepository.find(
+                { 
+                    where: { 
+                        owner_id: { id: user_id } 
+                    } 
+                }
+            );
+
+            if (detections.length == 0) {
+                throw new HttpException(
+                    'Ops, there is no detections for this user',
+                    HttpStatus.BAD_REQUEST,
+                );
+            }
+
+            return detections;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
     
 }

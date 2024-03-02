@@ -7,7 +7,9 @@ import {
     Post,
     Request,
     Param,
-    Get
+    Get,
+    UploadedFile,
+    Delete
 } from '@nestjs/common';
 import { AuthGuard } from '../auth/auth.guard';
 import { FacesService } from './faces.service';
@@ -24,16 +26,35 @@ export class FacesController {
     @HttpCode(HttpStatus.OK)
     @Post('createFace')
     createFace(
-        @Body() faceData: CreateFaceDto,
-        @Request() req
+        @Body() faceData: CreateFaceDto
     ){
-        return this.facesService.create(faceData, req.user.username);
+        return this.facesService.create(faceData);
     }
 
     @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     @Get('getFaces/:person_id')
-    getFaces(@Param() person_id){
+    getFacesByPersonId(@Param() person_id){
         return this.facesService.getAll(person_id);
+    }
+
+    @UseGuards(AuthGuard)
+    @HttpCode(HttpStatus.OK)
+    @Get('getFaces')
+    async getFaces(@Request() req){
+        return await this.facesService.getAllByUser(req.user.sub);
+    }
+
+    @Delete('remove/:person_id/:image_url')
+    async remove(
+        @UploadedFile()@Param('person_id') id, 
+        @Param('image_url') imageUrl
+    ){
+      const containerName = 'ccamstorage';
+      const user = await this.facesService.remove(id, imageUrl, containerName);
+      return {
+        user,
+        message: 'deleted successfully'
+      }
     }
 }

@@ -1,3 +1,3 @@
 export interface FacesInterface {
-    image_urls: {}
+    [key: string]: string;
 }

@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PurposeModule } from './purpose/purpose.module';
 import { DetectionsModule } from './detections/detections.module';
 import { FacesModule } from './faces/faces.module';
+import { FilesModule } from './files/files.module';
 
 @Module({
     imports: [
@@ -21,7 +22,8 @@ import { FacesModule } from './faces/faces.module';
         PurposeModule,
         AuthModule,
         UsersModule,
-        DatabaseModule
+        DatabaseModule,
+        FilesModule
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Users } from '../users/users.entity';
 
 @Entity({ name: 'registered_faces' })
 export class Faces {
@@ -10,6 +11,10 @@ export class Faces {
 
     @Column({ type: 'jsonb' })
     image_urls: any;
+
+    @ManyToOne(() => Users)
+    @JoinColumn({ name: 'created_by' }) 
+    created_by: Users; 
 
     @CreateDateColumn({ name: 'created_at' })
     created_at: Date;
