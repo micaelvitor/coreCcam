@@ -25,7 +25,7 @@ export class DetectionsService {
 
         const detection_data = {
             person_id: person_id.person_id,
-            owner_id: verifyPersonId.created_by.id
+            owner_id: verifyPersonId.created_by
         }
     
         const detection: Detections = this.detectionsRepository.create(detection_data as unknown as Faces);

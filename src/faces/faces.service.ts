@@ -22,10 +22,11 @@ export class FacesService {
     private readonly containerName: string = 'ccamimages';
 
     async findOneByPerson(person_id: string): Promise<Faces | undefined> {
-        const person = await this.facesRepository.findOne({ where: { person_id } });
+        const person = await this.facesRepository.findOne({ where: { person_id }, relations: ['created_by'] });
         if (person == null) {
             return undefined;
         }
+        console.log(person);
         return person;
     }
 
