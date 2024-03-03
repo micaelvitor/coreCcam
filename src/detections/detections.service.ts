@@ -3,18 +3,18 @@ import { Detections } from './detections.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDetectionDto } from './detections.dto';
+import { FacesService } from 'src/faces/faces.service';
 
 @Injectable()
 export class DetectionsService {
     constructor(
         @InjectRepository(Detections)
         private readonly detectionsRepository: Repository<Detections>,
+        private readonly facesService: FacesService
     ) {}
 
     async create(person_id: CreateDetectionDto): Promise<Detections> {
-
-        const verifyPersonId = await this.detectionsRepository.findOne({where: person_id});
-
+        const verifyPersonId = await this.facesService.findOneByPerson(person_id.person_id);
         if (!verifyPersonId) {
             throw new HttpException(
                 'Invalid person id',
@@ -42,15 +42,9 @@ export class DetectionsService {
         return detections;
     }
 
-    async getDetections(user_id: string): Promise<Detections[]>{
+    async getDetections(person_id: string): Promise<Detections[]>{
         try{
-            const detections= await this.detectionsRepository.find(
-                { 
-                    where: { 
-                        owner_id: { id: user_id } 
-                    } 
-                }
-            );
+            const detections= await this.detectionsRepository.find({ where: { person_id } } );
 
             if (detections.length == 0) {
                 throw new HttpException(
