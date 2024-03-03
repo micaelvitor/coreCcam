@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Detections } from './detections.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDetectionDto } from './detections.dto';
 import { FacesService } from 'src/faces/faces.service';
 import { Faces } from 'src/faces/faces.entity';
+import { Repository } from 'typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class DetectionsService {
@@ -49,18 +50,31 @@ export class DetectionsService {
         return detections;
     }
 
-    async getDetections(person_id: string): Promise<Detections[]>{
-        try{
-            const detections= await this.detectionsRepository.find({ where: { person_id } } );
+    async getDetections(person_id: string) {
+        try {
+            const detections = await this.detectionsRepository.find({
+                where: { 
+                    owner_id: { id: person_id }
+                },
+                relations: ['person_id']
+            });
 
-            if (detections.length == 0) {
+            if (detections.length === 0) {
                 throw new HttpException(
-                    'Ops, there is no detections for this user',
+                    'Ops, there are no detections for this user',
                     HttpStatus.BAD_REQUEST,
                 );
             }
 
-            return detections;
+            const returnJson = JSON.parse(JSON.stringify(detections));
+            const createdAtDate = moment(returnJson[0].person_id.created_at);
+            
+            const return_formated = {
+                name: returnJson[0].person_id.person_name,
+                date: createdAtDate.format('YYYY-MM-DD HH:mm') // Customize the format as needed
+            }
+
+            return return_formated;
         } catch (error) {
             console.error(error);
             throw error;

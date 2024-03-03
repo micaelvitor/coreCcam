@@ -1,12 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Users } from '../users/users.entity';
+import { Faces } from '../faces/faces.entity';
 
 @Entity({ name: 'detections' })
 export class Detections {
     @PrimaryGeneratedColumn('uuid', { name: 'detection_id' })
     detection_id: string;
 
-    @Column()
+    @ManyToOne(() => Faces)
+    @JoinColumn({ name: 'person_id' }) 
+    @Column('uuid')
     person_id: string;
 
     @CreateDateColumn({ name: 'created_at' })

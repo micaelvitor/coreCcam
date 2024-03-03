@@ -26,7 +26,6 @@ export class FacesService {
         if (person == null) {
             return undefined;
         }
-        console.log(person);
         return person;
     }
 
