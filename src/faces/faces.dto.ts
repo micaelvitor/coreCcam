@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
 import { FacesInterface } from './faces.interface'
 
 export class CreateFaceDto {
@@ -11,8 +11,8 @@ export class CreateFaceDto {
     @IsObject()
     image_urls: FacesInterface;
 
-    // @IsNotEmpty()
-    // @IsString()
-    // created_by: string;
+    @IsOptional()
+    @IsString()
+    created_by: string;
 
 }

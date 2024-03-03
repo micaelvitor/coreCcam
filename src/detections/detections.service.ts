@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateDetectionDto } from './detections.dto';
 import { FacesService } from 'src/faces/faces.service';
+import { Faces } from 'src/faces/faces.entity';
 
 @Injectable()
 export class DetectionsService {
@@ -21,24 +22,30 @@ export class DetectionsService {
                 HttpStatus.BAD_REQUEST,
             );
         }
+
+        const detection_data = {
+            person_id: person_id.person_id,
+            owner_id: verifyPersonId.created_by.id
+        }
     
-        const detection: Detections = this.detectionsRepository.create(person_id);
+        const detection: Detections = this.detectionsRepository.create(detection_data as unknown as Faces);
         await this.detectionsRepository.save(detection);
     
         return detection;
     }
 
-    async getDetectionsByPersonId(person_id: CreateDetectionDto): Promise<Detections>{
-
-        const detections = await this.detectionsRepository.findOne({where: person_id});
-
+    async getDetectionsByPersonId(person_id: string): Promise<Detections> {
+        const detections = await this.detectionsRepository.findOne({
+            where: { person_id: person_id }
+        });
+    
         if (!detections) {
             throw new HttpException(
                 'Invalid person id',
                 HttpStatus.BAD_REQUEST,
             );
         }
-
+    
         return detections;
     }
 

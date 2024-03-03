@@ -26,8 +26,10 @@ export class FacesController {
     @HttpCode(HttpStatus.OK)
     @Post('createFace')
     createFace(
-        @Body() faceData: CreateFaceDto
+        @Body() faceData: CreateFaceDto,
+        @Request() req
     ){
+        faceData.created_by = req.user.sub;
         return this.facesService.create(faceData);
     }
 
@@ -47,7 +49,8 @@ export class FacesController {
 
     @Delete('remove/:person_id/:image_url')
     async remove(
-        @UploadedFile()@Param('person_id') id, 
+        @UploadedFile()
+        @Param('person_id') id, 
         @Param('image_url') imageUrl
     ){
       const containerName = 'ccamstorage';

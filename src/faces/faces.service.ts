@@ -8,6 +8,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { filterImageFromURL } from './utils/filterImageFromUrl.utils';
 import { v4 as uuidv4 } from 'uuid';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class FacesService {
@@ -15,6 +16,7 @@ export class FacesService {
         @InjectRepository(Faces)
         private readonly facesRepository: Repository<Faces>,
         private readonly filesAzureService: FilesAzureService,
+        private readonly usersRepository: UsersService
     ) {}
 
     private readonly containerName: string = 'ccamimages';
@@ -29,7 +31,16 @@ export class FacesService {
 
     async create(facedata: CreateFaceDto) {
         try {
-            const face = this.facesRepository.create({ ...facedata });
+            const user = await this.usersRepository.findOneById(facedata.created_by);
+            if (!user) {
+                throw new Error('User not found');
+            }
+    
+            const face = this.facesRepository.create({
+                ...facedata,
+                created_by: user
+            });
+    
             return await this.facesRepository.save(face);
         } catch (error) {
             console.error('Error creating face:', error);

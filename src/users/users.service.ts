@@ -29,6 +29,14 @@ export class UsersService {
         return user;
     }
 
+    async findOneById(id: string): Promise<Users | undefined> {
+        const user = await this.userRepository.findOne({ where: { id } });
+        if(user == null){
+            return undefined;
+        }
+        return user;
+    }
+
     async validateCredentials({
         username,
         password,
