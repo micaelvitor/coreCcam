@@ -58,23 +58,21 @@ export class DetectionsService {
                 },
                 relations: ['person_id']
             });
-
+    
             if (detections.length === 0) {
                 throw new HttpException(
                     'Ops, there are no detections for this user',
                     HttpStatus.BAD_REQUEST,
                 );
             }
-
-            const returnJson = JSON.parse(JSON.stringify(detections));
-            const createdAtDate = moment(returnJson[0].person_id.created_at);
-            
-            const return_formated = {
-                name: returnJson[0].person_id.person_name,
-                date: createdAtDate.format('YYYY-MM-DD HH:mm') // Customize the format as needed
-            }
-
-            return return_formated;
+    
+            const formattedDetections = detections.map(detection => ({
+                id: detection.detection_id,
+                name: detection.person_id['person_name'],
+                date: moment(detection.created_at).format('YYYY-MM-DD HH:mm') 
+            }));
+    
+            return formattedDetections;
         } catch (error) {
             console.error(error);
             throw error;
