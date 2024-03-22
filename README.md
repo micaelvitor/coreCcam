@@ -77,3 +77,7 @@ export class AuthService {
     }
 }
 ```
+
+## Sobre
+
+Serviço ficticio para registrar detecções de pessoas desaparecidas/procuradas.
