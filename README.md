@@ -16,7 +16,7 @@ src
 ```js
 @Module({
   imports: [
-     MongooseModule.forFeature([
+     TypeOrmModule.forFeature([
       {
         name: <Objeto>ORM.name,
         schema: <Objeto>Schema,
