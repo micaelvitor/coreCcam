@@ -4,7 +4,10 @@ import {
     HttpCode,
     HttpStatus,
     Post,
-    Get
+    Get,
+    Ip,
+    Req,
+    Param
 } from '@nestjs/common';
 import { CreateUserDto } from './auth.dto'
 import { AuthService } from './auth.service';
@@ -33,5 +36,11 @@ export class AuthController {
     @Get('purposes')
     async purposes() {
         return await this.PurposeService.findAllPurposes();
+    }
+
+    @HttpCode(HttpStatus.CREATED)
+    @Get('getSasToken/:ip')
+    async getSasToken(@Param() ip){
+        return await this.authService.getSasToken(ip);
     }
 }

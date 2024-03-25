@@ -6,6 +6,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from './auth.dto';
+import { AccountSASPermissions, AccountSASResourceTypes, AccountSASServices, SASProtocol, StorageSharedKeyCredential, generateAccountSASQueryParameters } from '@azure/storage-blob'
 
 @Injectable()
 export class AuthService {
@@ -36,5 +37,35 @@ export class AuthService {
         delete user.admin;
         delete user.password;
         return user;
+    }
+
+    async getSasToken(ip: string){
+        const constants = {
+            accountName: process.env.AZURE_STORAGE_ACCOUNT_NAME,
+            accountKey: process.env.AZURE_STORAGE_ACCOUNT_KEY
+        };
+        
+        const sharedKeyCredential = new StorageSharedKeyCredential(
+            constants.accountName,
+            constants.accountKey
+        );
+
+        const sasOptions = {
+            services: AccountSASServices.parse("btqf").toString(),          
+            resourceTypes: AccountSASResourceTypes.parse("sco").toString(), 
+            permissions: AccountSASPermissions.parse("rwdlacupi"),
+            protocol: SASProtocol.Https,
+            IPAddressOrRange: ip,
+            startsOn: new Date(),
+            expiresOn: new Date(new Date().valueOf() + (10 * 60 * 1000)),  // 10 minutes
+        };
+    
+        const sasToken = generateAccountSASQueryParameters(
+            sasOptions,
+            sharedKeyCredential 
+        ).toString();
+        
+        // prepend sasToken with `?`
+        return sasToken;
     }
 }
