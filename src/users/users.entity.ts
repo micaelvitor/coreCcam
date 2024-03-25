@@ -21,6 +21,9 @@ export class Users {
     @Column({ name: 'purpose_id', default: 1 })
     purposeId: number;
 
+    @Column({default: '' })
+    email: string;
+
     @Column({default: 0})
     admin: number;
 

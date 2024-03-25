@@ -10,7 +10,7 @@ export class AppController {
    * This endpoint is used by Azure To check service health status
    * If removed the service will be marked off
    */
-  @Get()
+  @Get('/statuscheck')
   @HttpCode(200)
   statusCheck(): { status: string } {
     return this.appService.getStatus();
