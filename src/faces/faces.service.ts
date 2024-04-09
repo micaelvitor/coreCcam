@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Faces } from './faces.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateFaceDto } from './faces.dto';
-import { FilesAzureService } from 'src/files/files.service';
 import * as fs from 'fs';
 import * as path from 'path';
-import { filterImageFromURL } from './utils/filterImageFromUrl.utils';
-import { v4 as uuidv4 } from 'uuid';
+import { FilesAzureService } from 'src/files/files.service';
 import { UsersService } from 'src/users/users.service';
+import { Repository } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
+import { CreateFaceDto } from './faces.dto';
+import { Faces } from './faces.entity';
+import { filterImageFromURL } from './utils/filterImageFromUrl.utils';
 
 @Injectable()
 export class FacesService {
@@ -99,7 +99,7 @@ export class FacesService {
         }
     }
 
-    async remove(person_id: string, imageUrl: string, containerName: string): Promise<Faces> {
+    async remove(person_id: string): Promise<Faces> {
         try {
             const user = await this.facesRepository.findOne({
                 where: { person_id },
@@ -115,19 +115,10 @@ export class FacesService {
                 imageUrls = imageUrls.split(',').map(url => url.trim());
             }
     
-            const index = imageUrls.indexOf(imageUrl);
-            
-            if (index !== -1) {
-                imageUrls.splice(index, 1);
-    
-                await this.facesRepository.update(person_id, {
-                    ...user,
-                    image_urls: imageUrls.join(','),
-                });
-    
-                const file_ = imageUrl.split('/').pop();
-                await this.filesAzureService.deleteFile(file_, containerName);
-            }
+            await this.facesRepository.update(person_id, {
+                ...user,
+                active: false
+            });
     
             return user;
         } catch (error) {

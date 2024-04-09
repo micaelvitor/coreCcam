@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Users } from '../users/users.entity';
 
 @Entity({ name: 'registered_faces' })
@@ -11,6 +11,9 @@ export class Faces {
 
     @Column({ type: 'jsonb' })
     image_urls: any;
+
+    @Column('boolean', {default: true})
+    active: Boolean;
 
     @ManyToOne(() => Users)
     @JoinColumn({ name: 'created_by' }) 
